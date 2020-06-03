@@ -60,7 +60,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
         void (QComboBox::*comboBox_IndexChanged)(int) = &QComboBox::currentIndexChanged;
 
-        //QObject::connect(itemComboBox, comboBox_IndexChanged, this, &MainWindow::OnCellComboBoxChanged, Qt::AutoConnection);
+        // the actual connect function that connects events to the combo box:
+        QObject::connect(itemComboBox, comboBox_IndexChanged, this, &MainWindow::OnCellComboBoxChanged, Qt::AutoConnection);
+
+        // this does not work: "cannot deduce type for 'auto' from 'overloaded-function'"
+        //auto comboBox_IndexChanged_Auto = &QComboBox::currentIndexChanged;
+
+        //QObject::connect(itemComboBox, comboBox_IndexChanged_Auto, this, &MainWindow::OnCellComboBoxChanged, Qt::AutoConnection);
+
+        //connect(itemComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::OnCellComboBoxChanged, Qt::AutoConnection);
         //      why doesn't this work?
         //      ("cannot convert argument 2 from 'overloaded-function' to 'const char*'")
         //      is it typical in Qt that it's so difficult to connect slots to overloaded signals?
@@ -70,7 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
         //      I guess I'll stick with the temp variable method, it seems like the best way to do it with the version of C++ we have access to.
         //      Maybe Visual Studio supports this, but I wouldn't want to spend the time to provie it, I'm not even really sure what to search for on that.
 
-        //connect(itemComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::OnCellComboBoxChanged, Qt::AutoConnection);
+
     }
 
     ui->tblTest->setRowCount(2);
