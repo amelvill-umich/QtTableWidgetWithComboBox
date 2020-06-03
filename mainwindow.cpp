@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     // Qt FunctionPointer<>
+    // (for reference on how the connect function works internally)
     {
         // interestingly, this causes an infinite recursion
         //QtPrivate::FunctionPointer<void (MainWindow::*)(const QString &)>::Object testing;
@@ -57,16 +58,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
         comboBoxAlso = itemComboBox;
+    }
 
+    // the actual signal connection, what works and doesn't work
+    {
         void (QComboBox::*comboBox_IndexChanged)(int) = &QComboBox::currentIndexChanged;
 
         // the actual connect function that connects events to the combo box:
         QObject::connect(itemComboBox, comboBox_IndexChanged, this, &MainWindow::OnCellComboBoxChanged, Qt::AutoConnection);
 
         // this does not work: "cannot deduce type for 'auto' from 'overloaded-function'"
-        //auto comboBox_IndexChanged_Auto = &QComboBox::currentIndexChanged;
-
-        //QObject::connect(itemComboBox, comboBox_IndexChanged_Auto, this, &MainWindow::OnCellComboBoxChanged, Qt::AutoConnection);
+        //      auto comboBox_IndexChanged_Auto = &QComboBox::currentIndexChanged;
+        //      QObject::connect(itemComboBox, comboBox_IndexChanged_Auto, this, &MainWindow::OnCellComboBoxChanged, Qt::AutoConnection);
 
         //connect(itemComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::OnCellComboBoxChanged, Qt::AutoConnection);
         //      why doesn't this work?
