@@ -81,7 +81,10 @@ MainWindow::MainWindow(QWidget *parent) :
         //      I guess I'll stick with the temp variable method, it seems like the best way to do it with the version of C++ we have access to.
         //      Maybe Visual Studio supports this, but I wouldn't want to spend the time to provie it, I'm not even really sure what to search for on that.
 
+        // this won't work for file scoped functions either, "cannot convert argument 2 from 'overloaded-function' to 'const char*'"
+        //QObject::connect(itemComboBox, &QComboBox::currentIndexChanged, &FileScopeFunction);
 
+        QObject::connect(itemComboBox, comboBox_IndexChanged, &FileScopeFunction);
     }
 
     ui->tblTest->setRowCount(2);
